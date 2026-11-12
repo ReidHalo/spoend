@@ -391,6 +391,9 @@ async function loadTrack(index) {
   const t = tracks[currentTrackIndex];
   if (!t) return;
 
+  audioElement.src = t.audioUrl;
+  audioElement.load();
+
   document.getElementById('np-title').innerText = t.title;
   document.getElementById('np-artist').innerText = t.artist;
   document.getElementById('np-art').src = t.art;
@@ -421,8 +424,6 @@ async function loadTrack(index) {
 
   renderLyrics();
   renderComments();
-  audioElement.src = t.audioUrl;
-  audioElement.load();
 }
 
 function playAudio() {
@@ -637,7 +638,6 @@ function closeUploadModal() {
   document.getElementById('upload-modal').classList.remove('open');
 }
 
-
 function handleQuickUpload(e) {
   const file = e.target.files[0];
   if (!file) return;
@@ -705,7 +705,6 @@ async function submitAudioUpload() {
     alert('This audio file could not be saved in this browser.');
   }
 }
-
 
 function parseLrc(lrcText) {
   const lines = lrcText.split('\n');
