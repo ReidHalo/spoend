@@ -637,7 +637,7 @@ function renderLyrics() {
   if (!t || !t.lyrics || t.lyrics.length === 0) {
     const notice = document.createElement('div');
     notice.className = 'lyric-line active';
-    notice.textContent = 'No lyrics for this song yet.';
+    notice.textContent = 'Lyrics unavaliable for this song.';
     container.appendChild(notice);
     return;
   }
