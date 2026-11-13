@@ -3,7 +3,7 @@ const officialTracks = [
     id: 'style',
     title: 'Style',
     artist: 'Taylor Swift',
-    art: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=600&q=80',
+    art: 'https://i.ytimg.com/vi/-CmadmM5cOk/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLAsD9DpIi531XTkrtRwClnyDeFY3g',
     audioUrl: 'music/style.mp3',
     lyricsUrl: 'lyrics/style.lrc'
   },
@@ -11,8 +11,16 @@ const officialTracks = [
     id: 'wide-awake',
     title: 'Wide Awake',
     artist: 'Katy Perry',
-    art: 'https://i1.sndcdn.com/artworks-000055997472-comeza-t500x500.jpg',
+    art: 'https://i.ytimg.com/vi/k0BWlvnBmIE/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLBh_5EL80NgVMSB5f1llsEvx2nHvQ',
     audioUrl: 'music/wide-awake.mp3',
     lyricsUrl: 'lyrics/wide-awake.lrc'
+  },
+   {
+    id: 'billie-jean',
+    title: 'Billie Jean',
+    artist: 'Michael Jackson',
+    art: 'https://i.ytimg.com/vi/Zi_XLOBDo_Y/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCajwWb-rTL2j_XlaHs0ooGm2H8Kw',
+    audioUrl: 'music/billie-jean.mp3',
+    lyricsUrl: 'lyrics/billie-jean.lrc'
   }
 ];
