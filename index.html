@@ -236,33 +236,9 @@ main { flex: 1; display: flex; flex-direction: column; overflow-y: auto; padding
 
 <audio id="audio-element" preload="auto" crossorigin="anonymous"></audio>
 
+<script src="songs.js"></script>
 <script>
-const officialTracks = [
-  {
-    id: 'official-style',
-    title: 'Style',
-    artist: 'Taylor Swift',
-    art: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=600&q=80',
-    audioUrl: 'music/style.mp3',
-    lyricsUrl: 'lyrics/style.lrc',
-    visibility: 'official',
-    lyrics: [],
-    comments: []
-  },
-  {
-    id: 'official-wide-awake',
-    title: 'Wide Awake',
-    artist: 'Katy Perry',
-    art: 'https://i1.sndcdn.com/artworks-000055997472-comeza-t500x500.jpg',
-    audioUrl: 'music/wide-awake.mp3',
-    lyricsUrl: 'lyrics/wide-awake.lrc',
-    visibility: 'official',
-    lyrics: [],
-    comments: []
-  }
-];
-
-let tracks = [...officialTracks];
+let tracks = [];
 let localTracks = [];
 let currentTrackIndex = 0;
 let isPlaying = false;
@@ -319,6 +295,13 @@ async function storeLocalTrack(track) {
 }
 
 window.addEventListener('DOMContentLoaded', async () => {
+  const formattedOfficial = (typeof officialTracks !== 'undefined' ? officialTracks : []).map(t => ({
+    ...t,
+    visibility: 'official',
+    lyrics: [],
+    comments: []
+  }));
+
   try {
     localTracks = await getLocalTracks();
     localTracks = localTracks.map(track => ({
@@ -332,7 +315,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     localTracks = [];
   }
 
-  tracks = [...officialTracks, ...localTracks];
+  tracks = [...formattedOfficial, ...localTracks];
   renderTracks();
   loadTrack(0);
   initWaveform();
