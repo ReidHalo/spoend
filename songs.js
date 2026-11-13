@@ -27,7 +27,7 @@ const officialTracks = [
     id: 'amor-do-afonso',
     title: 'Amor do Afonso',
     artist: 'Alex',
-    art: 'blob:https://chatgpt.com/74fd6853-e125-4d7c-bc5c-daa21ed90e3b',
+    art: 'https://i.ibb.co/rfcNNmp2/image.png',
     audioUrl: 'music/amor-do-afonso.mp3',
     lyricsUrl: 'lyrics/amor-do-afonso.lrc'
   },
