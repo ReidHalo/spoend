@@ -54,6 +54,63 @@ main { flex: 1; min-width: 0; display: flex; flex-direction: column; overflow-y:
 .mobile-add-btn { background: var(--bg-card); border: 1px solid var(--border); color: var(--text-main); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 15px; flex-shrink: 0; }
 .search-bar { display: flex; align-items: center; background: var(--bg-card); border: 1px solid var(--border); border-radius: 30px; padding: 10px 16px; width: 100%; max-width: 380px; min-width: 0; gap: 10px; transition: 0.2s; }
 .search-bar:focus-within { border-color: var(--accent); }
+.search-bar input { background: none; border: none; color: var(--text-main); font-size: 14px; outline: none```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spoend</title>
+<link href="[https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap](https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap)" rel="stylesheet">
+<link rel="stylesheet" href="[https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css](https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css)">
+<style>
+:root {
+  --bg-main: #09090b;
+  --bg-sidebar: #121216;
+  --bg-card: #18181b;
+  --bg-card-hover: #242429;
+  --accent: #1db954;
+  --accent-hover: #1ed760;
+  --text-main: #f4f4f5;
+  --text-muted: #a1a1aa;
+  --border: #27272a;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+html, body { width: 100%; max-width: 100vw; overflow-x: hidden; }
+body { background: var(--bg-main); color: var(--text-main); height: 100dvh; display: flex; flex-direction: column; overflow: hidden; }
+.app-container { display: flex; flex: 1; overflow: hidden; min-height: 0; position: relative; }
+aside { width: 250px; background: var(--bg-sidebar); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 24px 16px; gap: 16px; flex-shrink: 0; overflow-y: auto; z-index: 400; transition: transform 0.25s ease; }
+.sidebar-top { display: flex; align-items: center; justify-content: space-between; }
+.sidebar-close-btn { display: none; background: var(--bg-card); border: 1px solid var(--border); color: var(--text-main); width: 34px; height: 34px; border-radius: 50%; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; }
+.sidebar-backdrop { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.72); z-index: 350; }
+.sidebar-backdrop.open { display: block; }
+.logo { display: flex; align-items: center; gap: 10px; font-size: 22px; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; cursor: pointer; }
+.logo i { color: var(--accent); }
+.nav-menu { display: flex; flex-direction: column; gap: 6px; }
+.nav-item { display: flex; align-items: center; gap: 14px; padding: 11px 14px; border-radius: 10px; color: var(--text-muted); text-decoration: none; font-weight: 600; font-size: 14px; transition: 0.2s; cursor: pointer; }
+.nav-item:hover, .nav-item.active { background: var(--bg-card); color: var(--text-main); }
+.nav-item i { font-size: 16px; width: 20px; text-align: center; flex-shrink: 0; }
+.nav-item span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sidebar-divider { height: 1px; background: var(--border); margin: 2px 0; flex-shrink: 0; }
+.playlists-header { display: flex; align-items: center; justify-content: space-between; padding: 0 6px; font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.6px; }
+.playlist-add-icon { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 15px; padding: 4px 6px; border-radius: 6px; transition: 0.2s; }
+.playlist-add-icon:hover { color: var(--text-main); background: var(--bg-card); }
+.playlists-list { display: flex; flex-direction: column; gap: 4px; max-height: 180px; overflow-y: auto; }
+.playlist-nav-item { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 12px; border-radius: 9px; color: var(--text-muted); font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+.playlist-nav-item:hover, .playlist-nav-item.active { background: var(--bg-card); color: var(--text-main); }
+.playlist-nav-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.playlist-nav-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.playlist-nav-count { font-size: 11px; color: var(--text-muted); flex-shrink: 0; }
+.upload-section { background: var(--bg-card); border: 1px dashed var(--border); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px; margin-top: auto; flex-shrink: 0; }
+.upload-section h4 { font-size: 13px; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
+.upload-section button { background: var(--accent); color: #000; border: none; border-radius: 8px; padding: 10px; font-weight: 700; font-size: 13px; cursor: pointer; transition: 0.2s; }
+.upload-section button:hover { background: var(--accent-hover); }
+main { flex: 1; min-width: 0; display: flex; flex-direction: column; overflow-y: auto; overflow-x: hidden; padding: 28px 32px; gap: 26px; background: radial-gradient(circle at top right, #181824 0%, #09090b 55%); }
+.header { display: flex; justify-content: space-between; align-items: center; gap: 12px; width: 100%; }
+.mobile-header-actions { display: none; align-items: center; gap: 10px; flex-shrink: 0; }
+.mobile-add-btn { background: var(--bg-card); border: 1px solid var(--border); color: var(--text-main); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 15px; flex-shrink: 0; }
+.search-bar { display: flex; align-items: center; background: var(--bg-card); border: 1px solid var(--border); border-radius: 30px; padding: 10px 16px; width: 100%; max-width: 380px; min-width: 0; gap: 10px; transition: 0.2s; }
+.search-bar:focus-within { border-color: var(--accent); }
 .search-bar input { background: none; border: none; color: var(--text-main); font-size: 14px; outline: none; width: 100%; min-width: 0; }
 .search-bar i { color: var(--text-muted); flex-shrink: 0; }
 .hero-banner { background: linear-gradient(135deg, #2e1065 0%, #1e1b4b 50%, #09090b 100%); border-radius: 20px; padding: 32px; display: flex; align-items: center; justify-content: space-between; gap: 24px; border: 1px solid var(--border); position: relative; overflow: hidden; }
@@ -202,7 +259,7 @@ main { flex: 1; min-width: 0; display: flex; flex-direction: column; overflow-y:
 <div class="app-container">
   <aside id="sidebar">
     <div class="sidebar-top">
-      <div class="logo">
+      <div class="logo" onclick="showHomeView()">
         <i class="fa-solid fa-waveform-lines"></i> Spoend
       </div>
       <button class="sidebar-close-btn" onclick="closeSidebar()" title="Close Menu"><i class="fa-solid fa-xmark"></i></button>
@@ -257,7 +314,7 @@ main { flex: 1; min-width: 0; display: flex; flex-direction: column; overflow-y:
           <button class="btn-secondary" onclick="openAddToPlaylistModal(tracks[currentTrackIndex]?.id)"><i class="fa-solid fa-list-ul"></i> Save</button>
         </div>
       </div>
-      <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=600&q=80" class="hero-art" id="hero-art" alt="Cover">
+      <img src="[https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=600&q=80](https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=600&q=80)" class="hero-art" id="hero-art" alt="Cover">
     </div>
 
     <div class="waveform-section">
@@ -311,7 +368,7 @@ main { flex: 1; min-width: 0; display: flex; flex-direction: column; overflow-y:
 
 <div class="player-bar">
   <div class="now-playing">
-    <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=600&q=80" class="np-art" id="np-art" alt="Cover">
+    <img src="[https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=600&q=80](https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=600&q=80)" class="np-art" id="np-art" alt="Cover">
     <div class="np-meta">
       <div class="np-title" id="np-title">Style</div>
       <div class="np-artist" id="np-artist">Taylor Swift</div>
@@ -566,12 +623,12 @@ function setPlaybackSpeed(val) {
   } else if ('webkitPreservesPitch' in audioElement) {
     audioElement.webkitPreservesPitch = false;
   }
-  document.getElementById('speed-value').innerText = `${currentSpeed.toFixed(2)}x`;
+  document.getElementById('speed-value').innerText = currentSpeed.toFixed(2) + 'x';
 }
 
 function setReverbMix(val) {
   currentReverb = parseFloat(val);
-  document.getElementById('reverb-value').innerText = `${Math.round(currentReverb * 100)}%`;
+  document.getElementById('reverb-value').innerText = Math.round(currentReverb * 100) + '%';
   if (currentReverb > 0) {
     initAudioEffects();
   }
@@ -760,7 +817,7 @@ function renderCurrentView() {
 
   if (q) {
     const exactAuthor = tracks.find(t => t.artist.toLowerCase() === q.toLowerCase());
-    titleEl.textContent = exactAuthor ? `Songs by ${exactAuthor.artist}` : `Search Results for "${q}"`;
+    titleEl.textContent = exactAuthor ? 'Songs by ' + exactAuthor.artist : 'Search Results for "' + q + '"';
   } else if (currentView === 'playlist') {
     const pl = playlists.find(p => p.id === activePlaylistId);
     titleEl.textContent = pl ? pl.name : 'Playlist';
@@ -786,7 +843,7 @@ async function saveTracks() {
 function renderTracks(list = getDisplayedTracks()) {
   const grid = document.getElementById('track-grid');
   const countEl = document.getElementById('song-count');
-  countEl.textContent = `${list.length} ${list.length === 1 ? 'song' : 'songs'}`;
+  countEl.textContent = list.length + (list.length === 1 ? ' song' : ' songs');
   grid.innerHTML = '';
 
   if (list.length === 0) {
@@ -821,7 +878,7 @@ function renderTracks(list = getDisplayedTracks()) {
 
     const overlay = document.createElement('div');
     overlay.className = 'play-overlay';
-    overlay.innerHTML = `<div class="play-btn-circle"><i class="fa-solid ${isCurrent && isPlaying ? 'fa-pause' : 'fa-play'}"></i></div>`;
+    overlay.innerHTML = '<div class="play-btn-circle"><i class="fa-solid ' + (isCurrent && isPlaying ? 'fa-pause' : 'fa-play') + '"></i></div>';
 
     artContainer.append(art, addBtn, overlay);
 
@@ -1010,7 +1067,7 @@ function updateProgress() {
   const currentTime = audioElement.currentTime;
   const duration = audioElement.duration || 1;
   const pct = (currentTime / duration) * 100;
-  document.getElementById('progress-fill').style.width = `${pct}%`;
+  document.getElementById('progress-fill').style.width = pct + '%';
   document.getElementById('current-time').innerText = formatTime(currentTime);
   document.getElementById('duration').innerText = formatTime(duration);
 
@@ -1022,7 +1079,7 @@ function formatTime(sec) {
   if (isNaN(sec)) return "0:00";
   const m = Math.floor(sec / 60);
   const s = Math.floor(sec % 60);
-  return `${m}:${s < 10 ? '0' : ''}${s}`;
+  return m + ':' + (s < 10 ? '0' : '') + s;
 }
 
 function seekAudio(e) {
@@ -1154,10 +1211,7 @@ function renderComments() {
   t.comments.forEach(c => {
     const item = document.createElement('div');
     item.className = 'comment-item';
-    item.innerHTML = `
-      <span class="comment-text">${escapeHtml(c.text)}</span>
-      <span class="comment-time">${formatTime(c.time)}</span>
-    `;
+    item.innerHTML = '<span class="comment-text">' + escapeHtml(c.text) + '</span><span class="comment-time">' + formatTime(c.time) + '</span>';
     item.onclick = () => {
       if (audioElement.duration) {
         audioElement.currentTime = c.time;
@@ -1207,7 +1261,7 @@ function submitCreatePlaylist() {
   if (!name) return;
   const newPl = {
     id: 'pl-' + Date.now().toString(),
-    name,
+    name: name,
     trackIds: []
   };
   playlists.push(newPl);
@@ -1220,7 +1274,7 @@ function openAddToPlaylistModal(trackId) {
   if (!trackId) return;
   selectedTrackForPlaylist = trackId;
   const track = tracks.find(t => t.id === trackId);
-  document.getElementById('playlist-target-song').textContent = track ? `${track.title} — ${track.artist}` : '';
+  document.getElementById('playlist-target-song').textContent = track ? track.title + ' — ' + track.artist : '';
   document.getElementById('quick-playlist-name').value = '';
   renderPlaylistPicker();
   document.getElementById('add-to-playlist-modal').classList.add('open');
@@ -1245,10 +1299,7 @@ function renderPlaylistPicker() {
     const hasTrack = pl.trackIds.includes(selectedTrackForPlaylist);
     const item = document.createElement('div');
     item.className = 'playlist-picker-item' + (hasTrack ? ' in-playlist' : '');
-    item.innerHTML = `
-      <span>${escapeHtml(pl.name)}</span>
-      <i class="fa-solid ${hasTrack ? 'fa-check' : 'fa-plus'}" style="color:${hasTrack ? 'var(--accent)' : 'var(--text-muted)'};"></i>
-    `;
+    item.innerHTML = '<span>' + escapeHtml(pl.name) + '</span><i class="fa-solid ' + (hasTrack ? 'fa-check' : 'fa-plus') + '" style="color:' + (hasTrack ? 'var(--accent)' : 'var(--text-muted)') + ';"></i>';
     item.onclick = () => {
       if (hasTrack) {
         pl.trackIds = pl.trackIds.filter(id => id !== selectedTrackForPlaylist);
@@ -1271,7 +1322,7 @@ function createAndAddPlaylist() {
   if (!name || !selectedTrackForPlaylist) return;
   const newPl = {
     id: 'pl-' + Date.now().toString(),
-    name,
+    name: name,
     trackIds: [selectedTrackForPlaylist]
   };
   playlists.push(newPl);
@@ -1324,17 +1375,17 @@ async function submitAudioUpload() {
   const title = document.getElementById('modal-song-title').value.trim() || 'Untitled';
   const artist = document.getElementById('modal-song-artist').value.trim() || 'Unknown Artist';
   const randomArts = [
-    'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=600&q=80'
+    '[https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=600&q=80](https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=600&q=80)',
+    '[https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=600&q=80](https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=600&q=80)',
+    '[https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=600&q=80](https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=600&q=80)',
+    '[https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=600&q=80](https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=600&q=80)'
   ];
 
   const id = 'local-' + Date.now().toString();
   const storedTrack = {
-    id,
-    title,
-    artist,
+    id: id,
+    title: title,
+    artist: artist,
     art: randomArts[Math.floor(Math.random() * randomArts.length)],
     audioBlob: pendingFile,
     comments: [],
@@ -1343,12 +1394,11 @@ async function submitAudioUpload() {
 
   try {
     await storeLocalTrack(storedTrack);
-    const localTrack = {
-      ...storedTrack,
+    const localTrack = Object.assign({}, storedTrack, {
       audioUrl: URL.createObjectURL(pendingFile),
       lyrics: [],
       visibility: 'local'
-    };
+    });
     localTracks.push(localTrack);
     tracks.push(localTrack);
     renderCurrentView();
@@ -1378,7 +1428,7 @@ function parseLrc(lrcText) {
       const time = minutes * 60 + seconds + millis;
       const text = match[4].trim();
       if (text) {
-        result.push({ time, text });
+        result.push({ time: time, text: text });
       }
     }
   }
