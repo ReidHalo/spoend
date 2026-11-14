@@ -116,9 +116,9 @@ main { flex: 1; display: flex; flex-direction: column; overflow-y: auto; padding
 .lyrics-body { display: flex; flex: 1; gap: 48px; max-width: 1100px; margin: 0 auto; width: 100%; align-items: center; overflow: hidden; }
 .lyrics-song-info { display: flex; flex-direction: column; gap: 16px; width: 300px; text-align: center; align-items: center; flex-shrink: 0; }
 .lyrics-song-art { width: 240px; height: 240px; border-radius: 16px; object-fit: cover; box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
-.lyrics-container { flex: 1; height: 100%; max-height: 460px; overflow-y: auto; display: flex; flex-direction: column; gap: 22px; padding: 40px 10px; scroll-behavior: smooth; text-align: center; }
+.lyrics-container { flex: 1; height: 100%; max-height: 460px; overflow-y: auto; display: flex; flex-direction: column; gap: 22px; padding: 40px 10px; scroll-behavior: smooth; text-align: center; will-change: transform; }
 .lyrics-container::-webkit-scrollbar { display: none; }
-.lyric-line { font-size: 22px; font-weight: 700; color: var(--text-muted); cursor: pointer; transition: 0.25s; line-height: 1.4; }
+.lyric-line { font-size: 22px; font-weight: 700; color: var(--text-muted); cursor: pointer; transition: color 0.2s, font-size 0.2s; line-height: 1.4; }
 .lyric-line:hover { color: var(--text-main); }
 .lyric-line.active { color: var(--accent); font-size: 28px; transform: scale(1.02); }
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(6px); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 16px; }
@@ -194,7 +194,7 @@ main { flex: 1; display: flex; flex-direction: column; overflow-y: auto; padding
     </div>
   </aside>
 
-  <main>
+  <main id="main-content">
     <div class="header">
       <div class="mobile-header-actions">
         <button class="mobile-menu-btn" onclick="toggleSidebar()" title="Toggle Sidebar"><i class="fa-solid fa-bars"></i></button>
@@ -206,6 +206,14 @@ main { flex: 1; display: flex; flex-direction: column; overflow-y: auto; padding
       <div class="mobile-header-actions">
         <button class="mobile-add-btn" onclick="openUploadModal()" title="Add Song"><i class="fa-solid fa-plus"></i></button>
       </div>
+    </div>
+
+    <div id="search-results-view" style="display:none; flex-direction:column; gap:16px;">
+      <div class="section-header">
+        <div class="section-title" id="search-results-title">Search Results</div>
+        <div class="song-count" id="search-song-count">0 songs</div>
+      </div>
+      <div class="track-grid" id="search-track-grid"></div>
     </div>
 
     <div id="home-view" style="display:flex; flex-direction:column; gap:28px;">
@@ -239,7 +247,7 @@ main { flex: 1; display: flex; flex-direction: column; overflow-y: auto; padding
       </div>
     </div>
 
-    <div id="catalog-view">
+    <div id="catalog-view" style="display:none; flex-direction:column; gap:16px;">
       <div class="section-header">
         <div class="section-title" id="catalog-title">Every Song</div>
         <div class="song-count" id="song-count">0 songs</div>
@@ -280,12 +288,12 @@ main { flex: 1; display: flex; flex-direction: column; overflow-y: auto; padding
       <button class="effects-btn" onclick="toggleEffectsPopover()" title="Speed & Reverb"><i class="fa-solid fa-sliders"></i></button>
       <div class="effects-popover" id="effects-popover">
         <div class="effect-group">
-          <span>Speed: <span id="speed-val">1.0</span>x</span>
-          <input type="range" id="speed-slider" min="0.5" max="2.0" step="0.1" value="1.0" oninput="changeSpeed(this.value)">
+          <span>Speed: <span id="speed-val">0.8</span>x</span>
+          <input type="range" id="speed-slider" min="0.4" max="1.5" step="0.05" value="0.8" oninput="changeSpeed(this.value)">
         </div>
         <div class="effect-group">
-          <span>Reverb</span>
-          <input type="range" id="reverb-slider" min="0" max="1" step="0.05" value="0" oninput="changeReverb(this.value)">
+          <span>Reverb: <span id="reverb-val">60</span>%</span>
+          <input type="range" id="reverb-slider" min="0" max="1" step="0.05" value="0.6" oninput="changeReverb(this.value)">
         </div>
       </div>
     </div>
@@ -362,6 +370,7 @@ let isRepeat = false;
 let pendingFile = null;
 let currentObjectUrl = null;
 let lastVolume = 1;
+let activeLyricIndex = -1;
 
 let audioCtx = null;
 let sourceNode = null;
@@ -441,11 +450,11 @@ window.addEventListener('DOMContentLoaded', async () => {
   }
 
   tracks = [...formattedOfficial, ...localTracks];
-  renderTracks(tracks);
   renderRandomSection();
   renderPlaylistsSidebar();
   loadTrack(0);
   initWaveform();
+  initAudioContext();
 
   audioElement.addEventListener('timeupdate', updateProgress);
   audioElement.addEventListener('ended', handleTrackEnd);
@@ -471,14 +480,18 @@ function toggleSidebar() {
 
 function goHome() {
   document.getElementById('search-input').value = '';
-  document.getElementById('catalog-title').innerText = 'Every Song';
-  renderTracks(tracks);
+  document.getElementById('search-results-view').style.display = 'none';
+  document.getElementById('home-view').style.display = 'flex';
+  document.getElementById('catalog-view').style.display = 'none';
   renderRandomSection();
   if (window.innerWidth <= 720) toggleSidebar();
 }
 
 function showEverySongPlatform() {
   document.getElementById('search-input').value = '';
+  document.getElementById('search-results-view').style.display = 'none';
+  document.getElementById('home-view').style.display = 'none';
+  document.getElementById('catalog-view').style.display = 'flex';
   document.getElementById('catalog-title').innerText = 'Every Song in the Platform';
   renderTracks(tracks);
   if (window.innerWidth <= 720) toggleSidebar();
@@ -493,6 +506,9 @@ function renderPlaylistsSidebar() {
     item.className = 'nav-item';
     item.innerHTML = `<i class="fa-solid fa-list-music"></i> <span style="overflow:hidden; text-overflow:ellipsis;">${p.name}</span>`;
     item.onclick = () => {
+      document.getElementById('search-results-view').style.display = 'none';
+      document.getElementById('home-view').style.display = 'none';
+      document.getElementById('catalog-view').style.display = 'flex';
       document.getElementById('catalog-title').innerText = p.name;
       const playlistTracks = tracks.filter(t => p.trackIds.includes(t.id));
       renderTracks(playlistTracks);
@@ -605,10 +621,9 @@ async function saveTracks() {
   }
 }
 
-function renderTracks(list = tracks) {
-  const grid = document.getElementById('track-grid');
-  const countEl = document.getElementById('song-count');
-  countEl.textContent = `${list.length} ${list.length === 1 ? 'song' : 'songs'}`;
+function renderTracks(list, gridId = 'track-grid') {
+  const grid = document.getElementById(gridId);
+  if (!grid) return;
   grid.innerHTML = '';
 
   list.forEach((t) => {
@@ -694,16 +709,20 @@ async function loadTrack(index) {
     }
   }
 
-  renderTracks(getFilteredTracks());
+  activeLyricIndex = -1;
+  renderTracks(tracks);
   renderLyrics();
   renderComments();
 }
 
 function playAudio() {
+  if (audioCtx && audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
   isPlaying = true;
   document.getElementById('play-icon').className = 'fa-solid fa-pause';
   audioElement.play().then(() => {
-    renderTracks(getFilteredTracks());
+    renderTracks(tracks);
     renderRandomSection();
   }).catch(() => {
     isPlaying = false;
@@ -715,7 +734,7 @@ function pauseAudio() {
   isPlaying = false;
   document.getElementById('play-icon').className = 'fa-solid fa-play';
   audioElement.pause();
-  renderTracks(getFilteredTracks());
+  renderTracks(tracks);
   renderRandomSection();
 }
 
@@ -814,12 +833,12 @@ function initAudioContext() {
     convolverNode = audioCtx.createConvolver();
 
     const rate = audioCtx.sampleRate;
-    const length = rate * 2.5;
+    const length = rate * 3.0;
     const impulse = audioCtx.createBuffer(2, length, rate);
     for (let c = 0; c < 2; c++) {
       const data = impulse.getChannelData(c);
       for (let i = 0; i < length; i++) {
-        data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, 2.2);
+        data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, 2.0);
       }
     }
     convolverNode.buffer = impulse;
@@ -831,14 +850,15 @@ function initAudioContext() {
     dryNode.connect(audioCtx.destination);
     wetNode.connect(audioCtx.destination);
 
-    dryNode.gain.value = 1;
-    wetNode.gain.value = 0;
+    dryNode.gain.value = 0.7;
+    wetNode.gain.value = 0.6;
   } catch(e) {}
 }
 
 function changeSpeed(val) {
-  audioElement.playbackRate = parseFloat(val);
-  document.getElementById('speed-val').innerText = parseFloat(val).toFixed(1);
+  const speed = parseFloat(val);
+  audioElement.playbackRate = speed;
+  document.getElementById('speed-val').innerText = speed.toFixed(1);
 }
 
 function changeReverb(val) {
@@ -846,7 +866,8 @@ function changeReverb(val) {
   if (!wetNode || !dryNode) return;
   const v = parseFloat(val);
   wetNode.gain.value = v;
-  dryNode.gain.value = 1 - (v * 0.4);
+  dryNode.gain.value = Math.max(0.3, 1 - (v * 0.4));
+  document.getElementById('reverb-val').innerText = Math.round(v * 100);
 }
 
 function updateProgress() {
@@ -881,6 +902,7 @@ function seekAudio(e) {
 function renderLyrics() {
   const container = document.getElementById('lyrics-container');
   container.innerHTML = '';
+  activeLyricIndex = -1;
   const t = tracks[currentTrackIndex];
   if (!t || !t.lyrics || t.lyrics.length === 0) {
     const notice = document.createElement('div');
@@ -905,27 +927,30 @@ function renderLyrics() {
 function updateActiveLyric(currentTime) {
   const t = tracks[currentTrackIndex];
   if (!t || !t.lyrics || t.lyrics.length === 0) return;
-  const lines = document.querySelectorAll('.lyric-line');
   let activeIdx = 0;
   for (let i = 0; i < t.lyrics.length; i++) {
     if (currentTime >= t.lyrics[i].time) {
       activeIdx = i;
     }
   }
-  lines.forEach((l, idx) => {
-    if (idx === activeIdx) {
-      l.classList.add('active');
-      const container = document.getElementById('lyrics-container');
-      if (container) {
-        container.scrollTo({
-          top: l.offsetTop - container.clientHeight / 2 + l.clientHeight / 2,
-          behavior: 'smooth'
-        });
+  if (activeIdx !== activeLyricIndex) {
+    activeLyricIndex = activeIdx;
+    const lines = document.querySelectorAll('.lyric-line');
+    lines.forEach((l, idx) => {
+      if (idx === activeIdx) {
+        l.classList.add('active');
+        const container = document.getElementById('lyrics-container');
+        if (container) {
+          container.scrollTo({
+            top: l.offsetTop - container.clientHeight / 2 + l.clientHeight / 2,
+            behavior: 'smooth'
+          });
+        }
+      } else {
+        l.classList.remove('active');
       }
-    } else {
-      l.classList.remove('active');
-    }
-  });
+    });
+  }
 }
 
 function initWaveform() {
@@ -1077,7 +1102,7 @@ async function submitAudioUpload() {
     };
     localTracks.push(localTrack);
     tracks.push(localTrack);
-    renderTracks(getFilteredTracks());
+    renderTracks(tracks);
     renderRandomSection();
     currentTrackIndex = tracks.length - 1;
     await loadTrack(currentTrackIndex);
@@ -1112,14 +1137,27 @@ function parseLrc(lrcText) {
   return result.length > 0 ? result : [{ time: 0, text: "No lyrics found." }];
 }
 
-function getFilteredTracks() {
-  const q = document.getElementById('search-input').value.toLowerCase().trim();
-  if (!q) return tracks;
-  return tracks.filter(t => t.title.toLowerCase().includes(q) || t.artist.toLowerCase().includes(q));
-}
+function filterTracks(val) {
+  const q = val.toLowerCase().trim();
+  const searchResultsView = document.getElementById('search-results-view');
+  const homeView = document.getElementById('home-view');
+  const catalogView = document.getElementById('catalog-view');
 
-function filterTracks() {
-  renderTracks(getFilteredTracks());
+  if (!q) {
+    searchResultsView.style.display = 'none';
+    homeView.style.display = 'flex';
+    catalogView.style.display = 'none';
+    return;
+  }
+
+  homeView.style.display = 'none';
+  catalogView.style.display = 'none';
+  searchResultsView.style.display = 'flex';
+
+  const filtered = tracks.filter(t => t.title.toLowerCase().includes(q) || t.artist.toLowerCase().includes(q));
+  document.getElementById('search-results-title').innerText = `Search Results for "${val}"`;
+  document.getElementById('search-song-count').innerText = `${filtered.length} ${filtered.length === 1 ? 'song' : 'songs'}`;
+  renderTracks(filtered, 'search-track-grid');
 }
 </script>
 </body>
